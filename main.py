@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import datetime
 import logging
 
-from home_scrapper import data_dir
 from home_scrapper.scrapers import ImotScraper
 
 logger = logging.getLogger(__name__)
@@ -31,10 +29,6 @@ if __name__ == "__main__":
     # - floor>=2
     # - bricks
     # Note that the last number in the url defines the page number (e.g. f1=1 corresponds to the first page).
-
-    # set destination file path
-    now = datetime.datetime.now().strftime("%Y.%m.%d-%H:%M:%S")
-    dest_filename = data_dir / f"data_{now}.csv"
 
     # run scrapper on the following search result urls
     urls = {
