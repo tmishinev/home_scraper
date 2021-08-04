@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import datetime
 import logging
 
-from home_scrapper.scrapers import ImotScraper
 from home_scrapper import data_dir
-
+from home_scrapper.scrapers import ImotScraper
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,8 @@ def main(url: str, sleep: int = 5):
     scraper.run(sleep=sleep)
 
     # export to csv
-    scraper.to_csv(filename=data_dir / "data.csv")
+    now = datetime.datetime.now().strftime("%Y.%m.%d-%H:%M:%S")
+    scraper.to_csv(filename=data_dir / f"data_{now}.csv")
 
     # check data
     df = scraper.get_scraped_data()
