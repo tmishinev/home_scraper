@@ -35,7 +35,7 @@ In the base directory execute `poetry run pytest --cov tests/`.
 
 ## TODO
 - [ ] export to DB using SQLAlchemy
-- [ ] loop over all result pages
+- [x] loop over all result pages
 - [ ] extract ad data by following each card's link
 - [ ] add the following information:
   - agency/broker

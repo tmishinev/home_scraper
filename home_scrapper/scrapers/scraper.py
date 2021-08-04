@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging
 from pathlib import Path
-
+import time
 import pandas as pd
+import numpy as np
 
 from bs4 import BeautifulSoup
 from bs4.element import Tag
+from requests import Response
 
 
 from home_scrapper.results import Home
@@ -75,7 +77,11 @@ class ImotScraper(Scraper):
 
         title, _ = self._get_title_link(card)
         rooms = "".join(c for c in title if c.isdigit())
-        return int(rooms)
+        try:
+            rooms = int(rooms)
+        except ValueError:
+            rooms = np.nan
+        return rooms
 
     def _get_location(self, card: Tag) -> tuple:
         """Returns city and neighbourhood names!
@@ -110,6 +116,7 @@ class ImotScraper(Scraper):
 
         # # request card (ad) page (HTML)
         # # TODO: before each request one should use time.sleep(sleep)
+        # time.sleep(sleep)
         # response = self.request(url=home.url)
         # soup = BeautifulSoup(response.content, "html.parser")
         # soup.prettify()
@@ -127,26 +134,39 @@ class ImotScraper(Scraper):
         soup = BeautifulSoup(response.content, "html.parser")
         soup.prettify()
 
-        # get number of pages
-        self.pages = self.get_page_count(soup)
+        # loop over results pages
+        page_count = self.get_page_count(soup)
+        for i in range(1, page_count+1):
 
-        # get the main table and loop over its children
-        td = soup.find("td", {"rowspan": 2})
-        cards = td.findChildren("table")
-        for card in cards:
-            if isinstance(card, Tag):
-                # skip adds
-                if ["novaSgrada"] in card.attrs.values():
-                    continue
+            print(f"Scraping result page {i} ... ", end="")
 
-                # process flats
-                if "style" in card.attrs.keys():
-                    if "резултат" in card.text.lower():
-                        # TODO: extract card information
-                        self.search_params = card.text
-                    else:
-                        home = self.scrape(card=card, sleep=sleep)
-                        self.homes.append(home)
+            # request the next page
+            if i > 1:
+                time.sleep(sleep)
+                url = self.url.replace("&f1=1", f"&f1={i}")
+                response = self.request(url=url)
+                soup = BeautifulSoup(response.content, "html.parser")
+                soup.prettify()
+
+            # get the main table and loop over its children
+            td = soup.find("td", {"rowspan": 2})
+            cards = td.findChildren("table")
+            for card in cards:
+                if isinstance(card, Tag):
+                    # skip adds
+                    if ["novaSgrada"] in card.attrs.values():
+                        continue
+
+                    # process flats
+                    if "style" in card.attrs.keys():
+                        if "резултат" in card.text.lower():
+                            # TODO: extract card information
+                            self.search_params = card.text
+                        else:
+                            home = self.scrape(card=card)
+                            self.homes.append(home)
+
+            print("done!")
 
     def to_csv(self, filename: Path):
         """Exports results to a CSV file!

@@ -12,7 +12,6 @@ class Scraper(ABC):
         self.headers = {
             "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
         }
-        self.pages = None
         self.search_params = ""
 
     def request(self, url: str, params: dict = None) -> Response:
