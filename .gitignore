@@ -21,3 +21,6 @@ dist/
 
 # binaries
 *.pdf
+
+# data
+data/
