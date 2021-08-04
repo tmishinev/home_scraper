@@ -10,6 +10,8 @@ from bs4.element import Tag
 from .base import Scraper
 from home_scrapper.results import db
 from home_scrapper.results import Homes
+from home_scrapper.utils.strings import extract_digits
+from home_scrapper.utils.strings import strip_digits
 
 logger = logging.getLogger(__name__)
 
@@ -115,13 +117,18 @@ class ImotScraper(Scraper):
             caption = caption.strip().lower()
             if "кв.м" in caption:
                 if home.area is None:
-                    home.area = caption
+                    home.area = float(caption.replace("кв.м", "").strip())
             elif "ет." in caption:
+                floor, floor_last = caption.split(sep="ет.")
                 if home.floor is None:
-                    home.floor = caption
+                    home.floor = int(extract_digits(floor))
+                if home.floor_last is None:
+                    home.floor_last = int(extract_digits(floor_last))
             elif "г." in caption:
                 if home.type is None:
-                    home.type = caption
+                    home.type = strip_digits(caption).replace("г.", "").strip()
+                if home.year is None:
+                    home.year = int(extract_digits(caption))
             elif "лок.отопл." == caption or "тец" == caption or "газ" == caption:
                 if home.heating is None:
                     home.heating = caption
