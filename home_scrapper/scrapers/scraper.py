@@ -171,4 +171,8 @@ class ImotScraper(Scraper):
         :param filename: target file path"""
 
         df = self.get_scraped_data()
-        df.to_csv(filename, index=False, mode="a")
+        if filename.exists():
+            is_header = False
+        else:
+            is_header = True
+        df.to_csv(filename, index=False, mode="a", header=is_header)

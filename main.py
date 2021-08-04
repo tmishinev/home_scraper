@@ -28,6 +28,7 @@ def main(url: str, dest_filename: Path, sleep: int = 5):
     df = df.astype({"price": float})
 
     # calculate some stats
+    print("-" * 40)
     print(f"Average price in EUR: {df.describe().loc['mean', 'price']}")
     print(f"Number of properties: {df.shape[0]}")
 
@@ -55,5 +56,6 @@ if __name__ == "__main__":
         "Plovdiv": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6sq759&f1=1",
     }
     for city, url in urls.items():
-        print(f"\nProcessing data from {city}:")
+        print("=" * 40)
+        print(f"Processing data from {city}:")
         main(url=url, dest_filename=dest_filename)
