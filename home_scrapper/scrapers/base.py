@@ -9,12 +9,15 @@ from home_scrapper.results import db
 
 
 class Scraper(ABC):
-    def __init__(self, url):
+    def __init__(self, url: str, headers: dict):
+        """Abstract Scraper class
+
+        :param url: target URL
+        :param headers: browser headers to be used when requesting the URL
+        """
         self.homes = []
         self.url = url
-        self.headers = {
-            "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
-        }
+        self.headers = headers
         self.search_params = ""
 
         # create DB session
