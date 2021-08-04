@@ -1,4 +1,4 @@
-# challenge
+# home scraper
 
 This package scrapes data from imot.bg
 
