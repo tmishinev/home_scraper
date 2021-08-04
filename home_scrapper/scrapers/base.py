@@ -9,25 +9,27 @@ from home_scrapper.results import db
 
 
 class Scraper(ABC):
-    def __init__(self, url: str, headers: dict):
+    def __init__(self, url: str, headers: dict, params: dict = None):
         """Abstract Scraper class
 
         :param url: target URL
         :param headers: browser headers to be used when requesting the URL
+        :param params: browser params to be used when requesting the URL
         """
         self.homes = []
         self.url = url
         self.headers = headers
+        self.params = params
         self.search_params = ""
 
         # create DB session
         # TODO: check if leaving this open causes problems!?
         self.session = Session(bind=db)
 
-    def request(self, url: str, params: dict = None) -> Response:
+    def request(self, url: str) -> Response:
         """Returns a BeatifulSoup object from the parsed url!
 
         :param url: target url string
         :param params: pagination query parameters
         """
-        return requests.get(url, headers=self.headers, params=params)
+        return requests.get(url, headers=self.headers, params=self.params)
