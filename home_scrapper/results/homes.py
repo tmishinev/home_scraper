@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from sqlalchemy import Column
+from sqlalchemy import DateTime
 from sqlalchemy import Float
 from sqlalchemy import Integer
 from sqlalchemy import String
@@ -25,6 +28,8 @@ class Homes(Base):
     floor = Column(Integer)
     rooms = Column(Integer)
     heating = Column(String)
+    created = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
+    last_updated = Column(DateTime)
     url = Column(String, unique=True)
 
     def to_db(self, database: Engine):
@@ -43,6 +48,7 @@ class Homes(Base):
             # update price if different price
             else:
                 if self.price != home.price:
+                    home.last_updated = datetime.datetime.utcnow()
                     home.price_last = home.price
                     home.price = self.price
                     session.commit()
