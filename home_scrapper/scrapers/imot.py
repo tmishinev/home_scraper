@@ -27,7 +27,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing some home details
         """
 
-        div = card.find("div", attrs={"class": "price"})  # class_="price"
+        div = card.find("div", class_="price")
         dum = div.text.strip()
         price = "".join(c for c in dum if c.isdigit())
         currency = "".join(c for c in dum if not c.isdigit())
@@ -43,7 +43,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing home details
         """
 
-        caption = card.find("td", attrs={"colspan": "3"})
+        caption = card.find("td", colspan="3")
         return caption.text
 
     @staticmethod
@@ -52,7 +52,7 @@ class ImotScraper(Scraper):
 
         :param card: HTML table tag containing home details
         """
-        img = card.find("a", attrs={"class": "photoLink"}).img
+        img = card.find("a", class_="photoLink").img
         return "http:" + img.attrs["src"]
 
     @staticmethod
@@ -62,7 +62,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing home details
         """
 
-        title_link = card.find("a", attrs={"class": "lnk1"})
+        title_link = card.find("a", class_="lnk1")
         return title_link.text, "https:" + title_link.attrs["href"]
 
     @staticmethod
@@ -71,7 +71,7 @@ class ImotScraper(Scraper):
 
         :param card: HTML table tag containing home details
         """
-        location_link = card.find("a", attrs={"class": "lnk2"})
+        location_link = card.find("a", class_="lnk2")
         return location_link.text, "https:" + location_link.attrs["href"]
 
     def _get_room_count(self, card: Tag) -> int:
@@ -103,7 +103,7 @@ class ImotScraper(Scraper):
 
         :param soup: BeautifulSoup object
         """
-        page_number_info = soup.find("span", {"class": "pageNumbersInfo"}).text
+        page_number_info = soup.find("span", class_="pageNumbersInfo").text
         return int(page_number_info.split(sep="от")[-1].strip())
 
     def _scrape(self, card: Tag):
@@ -195,7 +195,7 @@ class ImotScraper(Scraper):
                 soup.prettify()
 
             # get the main table and loop over its children
-            td = soup.find("td", attrs={"rowspan": 2})
+            td = soup.find("td", rowspan=2)
             cards = td.find_all("table")
             for card in cards:
                 if isinstance(card, Tag):
