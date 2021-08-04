@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import logging
+from pathlib import Path
 
 from home_scrapper import data_dir
 from home_scrapper.scrapers import ImotScraper
@@ -8,10 +9,11 @@ from home_scrapper.scrapers import ImotScraper
 logger = logging.getLogger(__name__)
 
 
-def main(url: str, sleep: int = 5):
+def main(url: str, dest_filename: Path, sleep: int = 5):
     """Runner script for the scrapper!
 
     :param url: target URL
+    :param dest_filename: destination CSV file path
     :param sleep: sleep time between URL requests"""
 
     # run scrapper
@@ -19,8 +21,7 @@ def main(url: str, sleep: int = 5):
     scraper.run(sleep=sleep)
 
     # export to csv
-    now = datetime.datetime.now().strftime("%Y.%m.%d-%H:%M:%S")
-    scraper.to_csv(filename=data_dir / f"data_{now}.csv")
+    scraper.to_csv(filename=dest_filename)
 
     # check data
     df = scraper.get_scraped_data()
@@ -44,4 +45,15 @@ if __name__ == "__main__":
     # - bricks
     # Note that the last number in the url defines the page number (e.g. f1=1 corresponds to the first page).
 
-    main(url="https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6sn5gf&f1=1")
+    # set destination file path
+    now = datetime.datetime.now().strftime("%Y.%m.%d-%H:%M:%S")
+    dest_filename = data_dir / f"data_{now}.csv"
+
+    # run scrapper on the following search result urls
+    urls = {
+        "Sofia": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6sn5gf&f1=1",
+        "Plovdiv": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6sq759&f1=1",
+    }
+    for city, url in urls.items():
+        print(f"\nProcessing data from {city}:")
+        main(url=url, dest_filename=dest_filename)
