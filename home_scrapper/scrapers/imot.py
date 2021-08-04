@@ -27,7 +27,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing some home details
         """
 
-        div = card.find_all("div", attrs={"class": "price"})[0]  # class_="price"
+        div = card.find("div", attrs={"class": "price"})  # class_="price"
         dum = div.text.strip()
         price = "".join(c for c in dum if c.isdigit())
         currency = "".join(c for c in dum if not c.isdigit())
@@ -43,7 +43,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing home details
         """
 
-        caption = card.find_all("td", attrs={"colspan": "3"})[0]
+        caption = card.find("td", attrs={"colspan": "3"})
         return caption.text
 
     @staticmethod
@@ -52,7 +52,7 @@ class ImotScraper(Scraper):
 
         :param card: HTML table tag containing home details
         """
-        img = card.find_all("a", attrs={"class": "photoLink"})[0].img
+        img = card.find("a", attrs={"class": "photoLink"}).img
         return "http:" + img.attrs["src"]
 
     @staticmethod
@@ -62,7 +62,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing home details
         """
 
-        title_link = card.find_all("a", attrs={"class": "lnk1"})[0]
+        title_link = card.find("a", attrs={"class": "lnk1"})
         return title_link.text, "https:" + title_link.attrs["href"]
 
     @staticmethod
@@ -71,7 +71,7 @@ class ImotScraper(Scraper):
 
         :param card: HTML table tag containing home details
         """
-        location_link = card.find_all("a", attrs={"class": "lnk2"})[0]
+        location_link = card.find("a", attrs={"class": "lnk2"})
         return location_link.text, "https:" + location_link.attrs["href"]
 
     def _get_room_count(self, card: Tag) -> int:
