@@ -34,6 +34,12 @@ class Homes(Base):
     last_updated = Column(DateTime)
     url = Column(String, unique=True)
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return f"{self.city}, {self.neighbourhood}, {self.rooms} стаен, {self.price} {self.currency}, {self.url}"
+
     def to_db(self, database: Engine):
         """dumps home to database!
 
