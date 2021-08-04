@@ -11,9 +11,16 @@ from home_scrapper.results import Homes
 logger = logging.getLogger(__name__)
 
 
-def get_objects():
+def query_homes():
+    """Returns all home rows (objects) in the DB!"""
     session = Session(bind=db)
     return session.query(Homes).all()
+
+
+def query_urls():
+    """Returns iterable of all urls!"""
+    session = Session(bind=db)
+    return session.query(Homes.title, Homes.url)
 
 
 def main():
@@ -24,6 +31,14 @@ def main():
     print("-" * 40)
     print(f"Average price: {df.describe().loc['mean', 'price']:.2f} EUR")
     print(f"Number of properties: {df.shape[0]}")
+
+    # query objects
+    for home in query_homes():
+        print(f"{home.title}: {home.url}")
+
+    # query all urls
+    for title, url in query_urls():
+        print(f"{title}: {url}")
 
 
 if __name__ == "__main__":
