@@ -132,7 +132,10 @@ class ImotScraper(Scraper):
                 if home.area is None:
                     home.area = float(caption.replace("кв.м", "").strip())
             elif "ет." in caption:
-                floor, floor_last = caption.split(sep="ет.")
+                try:
+                    floor, floor_last = caption.split(sep="ет.")
+                except ValueError as e:
+                    print(e)
                 if home.floor is None:
                     if "партер" in floor:
                         home.floor = 0

@@ -31,10 +31,11 @@ if __name__ == "__main__":
         "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
     }
     urls = {
-        "Sofia": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6xzaz3&f1=1",
-        "Plovdiv": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6xzax6&f1=1",
+        "Sofia": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6ywpm1&f1=1",
+        "Plovdiv": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6ywpp6&f1=1",
     }
     main(headers=headers, urls=urls)
 
     # TODO: 1) run pages in random order
     #       2) fix floor
+    #       3) parsing the current HTMLs does not scrape all data as it seems that the results are limited to 25 pages
