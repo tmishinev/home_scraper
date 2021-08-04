@@ -33,5 +33,7 @@ if __name__ == "__main__":
     urls = {
         "Sofia": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6ufg52&f1=1",
         "Plovdiv": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6uffou&f1=1",
+        # "Sofia-all": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6v145f&f1=1",
+        # "Plovdiv-all": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6v14br&f1=1",
     }
     main(headers=headers, urls=urls)
