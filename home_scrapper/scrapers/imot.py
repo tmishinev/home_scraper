@@ -29,12 +29,12 @@ class ImotScraper(Scraper):
 
         div = card.find("div", class_="price")
         dum = div.text.strip()
-        price = "".join(c for c in dum if c.isdigit())
-        currency = "".join(c for c in dum if not c.isdigit())
+        price = extract_digits(dum)
+        currency = strip_digits(dum)
         try:
-            return float(price), currency.strip()
+            return float(price), currency
         except ValueError:
-            return np.nan, currency.strip()
+            return np.nan, currency
 
     @staticmethod
     def _get_caption(card):
@@ -81,7 +81,7 @@ class ImotScraper(Scraper):
         """
 
         title, _ = self._get_title_link(card)
-        rooms = "".join(c for c in title if c.isdigit())
+        rooms = extract_digits(title)
         try:
             rooms = int(rooms)
         except ValueError:
