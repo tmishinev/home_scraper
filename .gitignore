@@ -1,0 +1,23 @@
+# local utils & log files
+.idea/
+*.log
+*.out
+poetry.lock
+
+# Python
+__pycache__
+*.pyc
+
+# esting
+.pytest_cache
+.coverage
+*.stats
+
+# Virtual environents
+*venv*/
+
+# exported packages for distribution
+dist/
+
+# binaries
+*.pdf
