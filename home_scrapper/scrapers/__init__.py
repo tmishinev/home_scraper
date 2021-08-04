@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from .scraper import ImotScraper
+from .imot import ImotScraper
