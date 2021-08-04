@@ -32,3 +32,15 @@ In the base directory execute `poetry run pytest --cov tests/`.
 ## Branches
 
 - master - verified version of the code
+
+## TODO
+- [ ] export to DB using SQLAlchemy
+- [ ] loop over all result pages
+- [ ] extract ad data by following each card's link
+- [ ] add the following information:
+  - agency/broker
+  - home type (house)
+  - address
+  - days_online
+  - text
+  - floor & area
