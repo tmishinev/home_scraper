@@ -1,28 +1,20 @@
 # -*- coding: utf-8 -*-
 import logging
 import time
-from pathlib import Path
 
 import numpy as np
-import pandas as pd
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-from requests import Response
 
 from .base import Scraper
-from home_scrapper.results import Home
+from home_scrapper.results import Homes
 
 logger = logging.getLogger(__name__)
 
 
 class ImotScraper(Scraper):
-    def get_scraped_data(self):
-        """Returns the scraped data as pandas DataFrame"""
-        df = pd.DataFrame()
-        for home in self.homes:
-            d = vars(home)
-            df = df.append(pd.Series(d), ignore_index=True)
-        return df
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def _get_price(card: Tag) -> tuple:
@@ -90,7 +82,7 @@ class ImotScraper(Scraper):
         return city.strip(), neighbourhood.strip()
 
     @staticmethod
-    def get_page_count(soup):
+    def _get_page_count(soup):
         """Returns the number of serach result pages!
 
         :param soup: BeautifulSoup object
@@ -98,18 +90,22 @@ class ImotScraper(Scraper):
         page_number_info = soup.find("span", {"class": "pageNumbersInfo"}).text
         return int(page_number_info.split(sep="от")[-1].strip())
 
-    def scrape(self, card: Tag, sleep: int = 5) -> Home:
+    def _scrape(self, card: Tag, sleep: int = 5):
         """Extracts the data for each parsed card
 
         :param card: results card from the web page
         :param sleep: sleep between each scrape"""
 
         # extract information
-        home = Home()
+        home = Homes()
         home.price, home.currency = self._get_price(card)
         home.rooms = self._get_room_count(card)
         home.title, home.url = self._get_title_link(card)
         home.city, home.neighbourhood = self._get_location(card)
+
+        # write to DB
+        self.session.add(home)
+        self.session.commit()
 
         # # request card (ad) page (HTML)
         # # TODO: before each request one should use time.sleep(sleep)
@@ -117,8 +113,6 @@ class ImotScraper(Scraper):
         # response = self.request(url=home.url)
         # soup = BeautifulSoup(response.content, "html.parser")
         # soup.prettify()
-
-        return home
 
     def run(self, sleep: int = 5):
         """Scraper runner method!
@@ -132,7 +126,7 @@ class ImotScraper(Scraper):
         soup.prettify()
 
         # loop over results pages
-        page_count = self.get_page_count(soup)
+        page_count = self._get_page_count(soup)
         for i in range(1, page_count + 1):
 
             print(f"Scraping result page {i} ... ", end="")
@@ -160,19 +154,6 @@ class ImotScraper(Scraper):
                             # TODO: extract card information
                             self.search_params = card.text
                         else:
-                            home = self.scrape(card=card)
-                            self.homes.append(home)
+                            self._scrape(card=card)
 
             print("done!")
-
-    def to_csv(self, filename: Path):
-        """Exports results to a CSV file!
-
-        :param filename: target file path"""
-
-        df = self.get_scraped_data()
-        if filename.exists():
-            is_header = False
-        else:
-            is_header = True
-        df.to_csv(filename, index=False, mode="a", header=is_header)
