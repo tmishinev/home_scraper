@@ -1,24 +1,21 @@
 # -*- coding: utf-8 -*-
 import logging
-from pathlib import Path
 import time
-import pandas as pd
-import numpy as np
+from pathlib import Path
 
+import numpy as np
+import pandas as pd
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 from requests import Response
 
-
-from home_scrapper.results import Home
-
 from .base import Scraper
+from home_scrapper.results import Home
 
 logger = logging.getLogger(__name__)
 
 
 class ImotScraper(Scraper):
-
     def get_scraped_data(self):
         """Returns the scraped data as pandas DataFrame"""
         df = pd.DataFrame()
@@ -136,7 +133,7 @@ class ImotScraper(Scraper):
 
         # loop over results pages
         page_count = self.get_page_count(soup)
-        for i in range(1, page_count+1):
+        for i in range(1, page_count + 1):
 
             print(f"Scraping result page {i} ... ", end="")
 

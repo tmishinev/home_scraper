@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from abc import ABC
 
 import requests
@@ -5,7 +6,6 @@ from requests.models import Response
 
 
 class Scraper(ABC):
-
     def __init__(self, url):
         self.homes = []
         self.url = url

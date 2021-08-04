@@ -1,5 +1,5 @@
+# -*- coding: utf-8 -*-
 class Home(object):
-
     def __init__(self):
         self.url = ""
         self.price = None

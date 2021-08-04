@@ -34,6 +34,7 @@ In the base directory execute `poetry run pytest --cov tests/`.
 - master - verified version of the code
 
 ## TODO
+
 - [ ] export to DB using SQLAlchemy
 - [x] loop over all result pages
 - [ ] extract ad data by following each card's link
