@@ -12,7 +12,6 @@ if not data_dir.exists():
 
 # set DB path
 _db_path = data_dir / "data.db"
-_db_path.unlink(missing_ok=True)  # TODO: this should be handled somehow
 
 # create DB engine
 # db = create_engine('sqlite:///:memory:', echo = True)

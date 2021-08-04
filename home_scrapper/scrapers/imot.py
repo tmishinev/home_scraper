@@ -7,7 +7,9 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 
 from .base import Scraper
+from home_scrapper.results import db
 from home_scrapper.results import Homes
+
 
 logger = logging.getLogger(__name__)
 
@@ -135,8 +137,7 @@ class ImotScraper(Scraper):
                 logging.info(f"Skipping caption: {caption}")
 
         # write to DB
-        self.session.add(home)
-        self.session.commit()
+        home.to_db(db)
 
         # # request card (ad) page (HTML)
         # # TODO: before each request one should use time.sleep(sleep)

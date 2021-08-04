@@ -3,9 +3,6 @@ from abc import ABC
 
 import requests
 from requests.models import Response
-from sqlalchemy.orm import Session
-
-from home_scrapper.results import db
 
 
 class Scraper(ABC):
@@ -22,14 +19,9 @@ class Scraper(ABC):
         self.params = params
         self.search_params = ""
 
-        # create DB session
-        # TODO: check if leaving this open causes problems!?
-        self.session = Session(bind=db)
-
     def request(self, url: str) -> Response:
         """Returns a BeatifulSoup object from the parsed url!
 
         :param url: target url string
-        :param params: pagination query parameters
         """
         return requests.get(url, headers=self.headers, params=self.params)
