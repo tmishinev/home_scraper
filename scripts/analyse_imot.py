@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import datetime
 import logging
+import webbrowser
 
 import pandas as pd
 from sqlalchemy.orm import Session
@@ -23,22 +25,32 @@ def query_urls():
     return session.query(Homes.title, Homes.url)
 
 
-def main():
+def main(days_back: int = 0):
     """Runner script for the scrapper!"""
 
+    # set reference date
+    reference_date = datetime.date.today() - datetime.timedelta(days=days_back)
+
+    # query objects
+    homes = query_homes()
+    for home in homes:
+
+        # print objects updated today
+        if home.last_updated is not None and home.last_updated.date() >= reference_date:
+            print(home.city, home.title, home.url)
+            webbrowser.open_new_tab(home.url)
+
+        # print objects from today
+        if home.created.date() >= reference_date:
+            print(home.created.date(), home.city, home.url)
+            webbrowser.open_new_tab(home.url)
+
     # analyse data
-    df = pd.read_sql_query("SELECT * FROM homes;", con=db)
+    # df = pd.read_sql_query("SELECT * FROM homes;", con=db)
+    df = pd.DataFrame([vars(home) for home in homes])
     print("-" * 40)
     print(f"Average price: {df.describe().loc['mean', 'price']:.2f} EUR")
     print(f"Number of properties: {df.shape[0]}")
-
-    # query objects
-    for home in query_homes():
-        print(f"{home.title}: {home.url}")
-
-    # query all urls
-    for title, url in query_urls():
-        print(f"{title}: {url}")
 
 
 if __name__ == "__main__":
