@@ -8,15 +8,23 @@ from home_scrapper.scrapers import ImotScraper
 logger = logging.getLogger(__name__)
 
 
-def main(headers: dict, urls: dict):
-    """Runner script for the scrapper!"""
+def main(
+    headers: dict, urls: dict, params: dict = None, sleep_range: tuple = (1.5, 2.9)
+):
+    """Runner script for the scrapper!
+
+    :param headers: browser header used by the requests package
+    :param urls: city name and search result urls
+    :param params: browser parameters used by the requests package
+    :param sleep_range: range for the sleep time
+    """
 
     # run scrapper on the following search result urls
     for city, url in urls.items():
         print("=" * 40)
         print(f"Processing data from {city}:")
-        scraper = ImotScraper(url=url, headers=headers)
-        scraper.run(sleep=random.uniform(1.5, 2.9))
+        scraper = ImotScraper(url=url, headers=headers, params=params)
+        scraper.run(sleep=random.uniform(sleep_range[0], sleep_range[1]))
 
 
 if __name__ == "__main__":
