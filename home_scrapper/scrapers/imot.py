@@ -139,13 +139,6 @@ class ImotScraper(Scraper):
         # write to DB
         home.to_db(db)
 
-        # # request card (ad) page (HTML)
-        # # TODO: before each request one should use time.sleep(sleep)
-        # time.sleep(sleep)
-        # response = self.request(url=home.url)
-        # soup = BeautifulSoup(response.content, "html.parser")
-        # soup.prettify()
-
     def run(self, sleep: float = 3.0):
         """Scraper runner method!
 

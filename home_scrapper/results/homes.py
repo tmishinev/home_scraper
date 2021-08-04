@@ -10,7 +10,6 @@ from sqlalchemy.orm import Session
 Base = declarative_base()
 
 
-# TODO: rename to Home
 class Homes(Base):
     __tablename__ = "homes"
     id = Column(Integer, primary_key=True)
