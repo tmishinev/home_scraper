@@ -90,7 +90,7 @@ class ImotScraper(Scraper):
         page_number_info = soup.find("span", {"class": "pageNumbersInfo"}).text
         return int(page_number_info.split(sep="от")[-1].strip())
 
-    def _scrape(self, card: Tag, sleep: int = 5):
+    def _scrape(self, card: Tag, sleep: float = 3.0):
         """Extracts the data for each parsed card
 
         :param card: results card from the web page
@@ -145,7 +145,7 @@ class ImotScraper(Scraper):
         # soup = BeautifulSoup(response.content, "html.parser")
         # soup.prettify()
 
-    def run(self, sleep: int = 5):
+    def run(self, sleep: float = 3.0):
         """Scraper runner method!
 
         :param sleep: sleep between each scrape
