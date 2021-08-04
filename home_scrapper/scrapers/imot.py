@@ -52,8 +52,11 @@ class ImotScraper(Scraper):
 
         :param card: HTML table tag containing home details
         """
-        img = card.find("a", class_="photoLink").img
-        return "http:" + img.attrs["src"]
+        image_url = card.find("a", class_="photoLink").img.attrs["src"]
+        if "photo_big.gif" in image_url:
+            return None
+        else:
+            return "http:" + image_url
 
     @staticmethod
     def _get_title_link(card: Tag) -> tuple:
