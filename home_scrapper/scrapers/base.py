@@ -3,7 +3,7 @@ from abc import ABC
 
 import requests
 from requests.models import Response
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 
 from home_scrapper.results import db
 
@@ -19,8 +19,7 @@ class Scraper(ABC):
 
         # create DB session
         # TODO: check if leaving this open causes problems!?
-        Session = sessionmaker(bind=db)
-        self.session = Session()
+        self.session = Session(bind=db)
 
     def request(self, url: str, params: dict = None) -> Response:
         """Returns a BeatifulSoup object from the parsed url!
