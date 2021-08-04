@@ -10,3 +10,5 @@ class Home(object):
         self.floor = None
         self.rooms = None
         self.title = ""
+        self.year = None
+        self.heating = ""

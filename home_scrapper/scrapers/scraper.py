@@ -39,6 +39,16 @@ class ImotScraper(Scraper):
         return float(price), currency.strip()
 
     @staticmethod
+    def _get_summary_caption(card):
+        """Returns the summary caption from the results page!
+
+        :param card: HTML table tag containing home details
+        """
+
+        caption = card.findChildren("td", attrs={"colspan": "3"})[0]
+        return caption.text
+
+    @staticmethod
     def _get_title_link(card: Tag) -> tuple:
         """Returns ad title and its corresponding url!
 
