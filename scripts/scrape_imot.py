@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import logging
-import random
 
 from home_scrapper.scrapers import ImotScraper
 
@@ -24,7 +23,7 @@ def main(
         print("=" * 40)
         print(f"Processing data from {city}:")
         scraper = ImotScraper(url=url, headers=headers, params=params)
-        scraper.run(sleep=random.uniform(sleep_range[0], sleep_range[1]))
+        scraper.run(sleep_range=sleep_range)
 
 
 if __name__ == "__main__":

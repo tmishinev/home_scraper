@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import random
 import time
 
 import numpy as np
@@ -9,7 +10,6 @@ from bs4.element import Tag
 from .base import Scraper
 from home_scrapper.results import db
 from home_scrapper.results import Homes
-
 
 logger = logging.getLogger(__name__)
 
@@ -139,10 +139,10 @@ class ImotScraper(Scraper):
         # write to DB
         home.to_db(db)
 
-    def run(self, sleep: float = 3.0):
+    def run(self, sleep_range: tuple = (1.5, 2.9)):
         """Scraper runner method!
 
-        :param sleep: sleep between each scrape
+        :param sleep_range: range for random sleep between each scrape
         """
 
         # request HTML
@@ -158,6 +158,7 @@ class ImotScraper(Scraper):
 
             # request the next page
             if i > 1:
+                sleep = random.uniform(sleep_range[0], sleep_range[1])
                 time.sleep(sleep)
                 url = self.url.replace("&f1=1", f"&f1={i}")
                 response = self.request(url=url)
