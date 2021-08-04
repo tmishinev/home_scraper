@@ -5,7 +5,7 @@ import requests
 from requests.models import Response
 from sqlalchemy.orm import sessionmaker
 
-from home_scrapper.results import db_engine
+from home_scrapper.results import db
 
 
 class Scraper(ABC):
@@ -18,8 +18,8 @@ class Scraper(ABC):
         self.search_params = ""
 
         # create DB session
-        # TODO: check if leavin this open causes problems!?
-        Session = sessionmaker(bind=db_engine)
+        # TODO: check if leaving this open causes problems!?
+        Session = sessionmaker(bind=db)
         self.session = Session()
 
     def request(self, url: str, params: dict = None) -> Response:
