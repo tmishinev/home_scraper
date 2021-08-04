@@ -29,7 +29,10 @@ class ImotScraper(Scraper):
         dum = div.text.strip()
         price = "".join(c for c in dum if c.isdigit())
         currency = "".join(c for c in dum if not c.isdigit())
-        return float(price), currency.strip()
+        try:
+            return float(price), currency.strip()
+        except ValueError:
+            return np.nan, currency.strip()
 
     @staticmethod
     def _get_caption(card):
