@@ -27,7 +27,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing some home details
         """
 
-        div = card.findChildren("div", attrs={"class": "price"})[0]
+        div = card.find_all("div", attrs={"class": "price"})[0]  # class_="price"
         dum = div.text.strip()
         price = "".join(c for c in dum if c.isdigit())
         currency = "".join(c for c in dum if not c.isdigit())
@@ -43,7 +43,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing home details
         """
 
-        caption = card.findChildren("td", attrs={"colspan": "3"})[0]
+        caption = card.find_all("td", attrs={"colspan": "3"})[0]
         return caption.text
 
     @staticmethod
@@ -52,7 +52,7 @@ class ImotScraper(Scraper):
 
         :param card: HTML table tag containing home details
         """
-        img = card.findChildren("a", attrs={"class": "photoLink"})[0].img
+        img = card.find_all("a", attrs={"class": "photoLink"})[0].img
         return "http:" + img.attrs["src"]
 
     @staticmethod
@@ -62,7 +62,7 @@ class ImotScraper(Scraper):
         :param card: HTML table tag containing home details
         """
 
-        title_link = card.findChildren("a", attrs={"class": "lnk1"})[0]
+        title_link = card.find_all("a", attrs={"class": "lnk1"})[0]
         return title_link.text, "https:" + title_link.attrs["href"]
 
     @staticmethod
@@ -71,7 +71,7 @@ class ImotScraper(Scraper):
 
         :param card: HTML table tag containing home details
         """
-        location_link = card.findChildren("a", attrs={"class": "lnk2"})[0]
+        location_link = card.find_all("a", attrs={"class": "lnk2"})[0]
         return location_link.text, "https:" + location_link.attrs["href"]
 
     def _get_room_count(self, card: Tag) -> int:
@@ -195,8 +195,8 @@ class ImotScraper(Scraper):
                 soup.prettify()
 
             # get the main table and loop over its children
-            td = soup.find("td", {"rowspan": 2})
-            cards = td.findChildren("table")
+            td = soup.find("td", attrs={"rowspan": 2})
+            cards = td.find_all("table")
             for card in cards:
                 if isinstance(card, Tag):
                     # skip adds
