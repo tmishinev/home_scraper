@@ -30,7 +30,7 @@ class ImotScraper(Scraper):
         return float(price), currency.strip()
 
     @staticmethod
-    def _get_summary_caption(card):
+    def _get_caption(card):
         """Returns the summary caption from the results page!
 
         :param card: HTML table tag containing home details
@@ -102,6 +102,37 @@ class ImotScraper(Scraper):
         home.rooms = self._get_room_count(card)
         home.title, home.url = self._get_title_link(card)
         home.city, home.neighbourhood = self._get_location(card)
+
+        # extract data from the caption
+        data = self._get_caption(card)
+        captions = data.replace("\n", "").strip().split(sep=",")
+        for caption in captions:
+            caption = caption.strip().lower()
+            if "кв.м" in caption:
+                if home.area is None:
+                    home.area = caption
+            elif "ет." in caption:
+                if home.floor is None:
+                    home.floor = caption
+            elif "г." in caption:
+                if home.type is None:
+                    home.type = caption
+            elif "лок.отопл." == caption or "тец" == caption or "газ" == caption:
+                if home.heating is None:
+                    home.heating = caption
+                else:
+                    home.heating += ", " + caption
+            elif "тел." in caption:
+                if home.phone is None:
+                    caption = (
+                        caption.replace("-", "")
+                        .replace("/", "")
+                        .replace(" ", "")
+                        .replace("тел.:", "")
+                    )
+                    home.phone = caption
+            else:
+                logging.info(f"Skipping caption: {caption}")
 
         # write to DB
         self.session.add(home)

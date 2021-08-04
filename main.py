@@ -15,8 +15,8 @@ def main():
         "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:87.0) Gecko/20100101 Firefox/87.0",
     }
     urls = {
-        "Sofia": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6sn5gf&f1=1",
-        "Plovdiv": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6sq759&f1=1",
+        "Sofia": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6ufg52&f1=1",
+        "Plovdiv": "https://www.imot.bg/pcgi/imot.cgi?act=3&slink=6uffou&f1=1",
     }
     for city, url in urls.items():
         print("=" * 40)
