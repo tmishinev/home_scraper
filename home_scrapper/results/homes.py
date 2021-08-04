@@ -33,6 +33,7 @@ class Homes(Base):
     created = Column(DateTime, default=datetime.datetime.utcnow, nullable=False)
     last_updated = Column(DateTime)
     url = Column(String, unique=True)
+    image_url = Column(String)
 
     def __repr__(self):
         return self.__str__()

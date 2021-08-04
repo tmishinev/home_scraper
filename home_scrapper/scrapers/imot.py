@@ -47,6 +47,15 @@ class ImotScraper(Scraper):
         return caption.text
 
     @staticmethod
+    def _get_image(card):
+        """Returns the title image of the home add!
+
+        :param card: HTML table tag containing home details
+        """
+        img = card.findChildren("a", attrs={"class": "photoLink"})[0].img
+        return "http:" + img.attrs["src"]
+
+    @staticmethod
     def _get_title_link(card: Tag) -> tuple:
         """Returns ad title and its corresponding url!
 
@@ -97,11 +106,11 @@ class ImotScraper(Scraper):
         page_number_info = soup.find("span", {"class": "pageNumbersInfo"}).text
         return int(page_number_info.split(sep="от")[-1].strip())
 
-    def _scrape(self, card: Tag, sleep: float = 3.0):
+    def _scrape(self, card: Tag):
         """Extracts the data for each parsed card
 
         :param card: results card from the web page
-        :param sleep: sleep between each scrape"""
+        """
 
         # extract information
         home = Homes()
@@ -109,6 +118,7 @@ class ImotScraper(Scraper):
         home.rooms = self._get_room_count(card)
         home.title, home.url = self._get_title_link(card)
         home.city, home.neighbourhood = self._get_location(card)
+        home.image_url = self._get_image(card)
 
         # extract data from the caption
         data = self._get_caption(card)
