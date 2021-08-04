@@ -8,11 +8,15 @@ from home_scrapper import data_dir
 logger = logging.getLogger(__name__)
 
 
-def main(url: str):
+def main(url: str, sleep: int = 5):
+    """Runner script for the scrapper!
+
+    :param url: target URL
+    :param sleep: sleep time between URL requests"""
 
     # run scrapper
     scraper = ImotScraper(url=url)
-    scraper.run(sleep=5)
+    scraper.run(sleep=sleep)
 
     # export to csv
     scraper.to_csv(filename=data_dir / "data.csv")
